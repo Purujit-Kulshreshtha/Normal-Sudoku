@@ -5,6 +5,7 @@ HEIGHT = 600
 #colors
 BG = (22, 22, 22)
 WHITE =  (255, 255, 255)
+CO_1 = (120, 10, 0)
 
 #gird
 BOARD = [[y for y in range (0, 9)] for x in range(0, 9)]
