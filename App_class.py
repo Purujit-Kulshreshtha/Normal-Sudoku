@@ -9,7 +9,7 @@ class App:
 		pygame.init()
 		self.window = pygame.display.set_mode((WIDTH, HEIGHT))
 		self.running = True #game variable
-		self.board = BOARD
+		self.board = BOARD_2
 		self.selected = None #box selection variable
 		self.mouse_pos = None 
 		self.state = "playing" #the state of the game(menu, playing, ended etc.)
@@ -18,6 +18,8 @@ class App:
 		self.menu_buttons = []
 		self.end_buttons = []
 		self.load_buttons()
+		#text
+		self.render_font = pygame.font.SysFont("arial", CELL_SIZE//2)
 
 	def run(self):
 		while self.running:
@@ -54,14 +56,23 @@ class App:
 
 		for button in self.playing_buttons:
 			button.draw(self.window)
-			print("Button Drawn")
 
 		if self.selected: #fill selected box
 			self.draw_selection(self.window, self.selected)
+
+		self.draw_numbers(self.window) #function to draw the numbers on screen
+
 		self.draw_grid(self.window) #draw grid
 		pygame.display.update()
 
 	### Helper Functions ###
+
+	def draw_numbers(self, window):
+		for yindex, row in enumerate(self.board):
+			for xindex, num in enumerate(row):
+				if num != 0:
+					pos = [(xindex*CELL_SIZE)+grid_pos[0], (yindex*CELL_SIZE)+grid_pos[1]]
+					self.text_to_screen(window, str(num), pos)
 
 	def draw_grid(self, window):
 		pygame.draw.rect(window, WHITE, GRID_TRANS, 2) #draw grid box
@@ -96,3 +107,11 @@ class App:
 
 	def load_buttons(self):
 		self.playing_buttons.append(Button(20, 40, 100, 40))
+
+	def text_to_screen(self, window, text, pos):
+		font = self.render_font.render(text, False, WHITE)
+		font_width = font.get_width()
+		font_height = font.get_height()
+		pos[0] += (CELL_SIZE - font_width)//2
+		pos[1] += (CELL_SIZE - font_height)//2
+		window.blit(font, pos)
