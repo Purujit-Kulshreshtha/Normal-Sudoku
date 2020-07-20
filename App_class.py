@@ -16,6 +16,8 @@ class App:
 		self.selected = None #box selection variable
 		self.mouse_pos = None 
 		self.state = "playing" #the state of the game(menu, playing, ended etc.)
+		self.finished = False
+		self.cell_changed = False
 		#buttons for each state
 		self.playing_buttons = []
 		self.menu_buttons = []
@@ -51,15 +53,22 @@ class App:
 
 			#on key input
 			if event.type == pygame.KEYDOWN:
-				if self.selected != None and self.selected not in self.locked:
+				if self.selected != None and list(self.selected) not in self.locked:
 					if self.is_int(event.unicode):
 						self.board[self.selected[1]][self.selected[0]] = int(event.unicode)
+						self.cell_changed = True
 
 	def playing_update(self):
 		self.mouse_pos = pygame.mouse.get_pos() #get postition of mouse at every frame
 
 		for button in self.playing_buttons:
 			button.update(self.mouse_pos)
+
+		if self.cell_changed:
+			if self.board_full(self.board):
+				#check if the solution is correct
+				print("Done")
+				pass
 
 		
 	def playing_draw(self):
@@ -77,6 +86,8 @@ class App:
 
 		self.draw_grid(self.window) #draw grid
 		pygame.display.update()
+
+		self.cell_changed = True
 
 	### Helper Functions ###
 
@@ -149,3 +160,11 @@ class App:
 				if num == 0:
 					continue
 				self.locked.append([xindex, yindex])
+
+	def board_full(self, board):
+		ret = True
+		for row in board:
+			if 0 in row:
+				ret = False
+				break
+		return ret
