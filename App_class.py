@@ -10,8 +10,9 @@ class App:
 		self.window = pygame.display.set_mode((WIDTH, HEIGHT))
 		self.running = True #game variable
 		#board making
-		self.board = BOARD_2
+		self.board = BOARD_2_FINISHED
 		self.locked = []
+		self.incorrect_cells = []
 		#other variables
 		self.selected = None #box selection variable
 		self.mouse_pos = None 
@@ -67,8 +68,8 @@ class App:
 		if self.cell_changed:
 			if self.board_full(self.board):
 				#check if the solution is correct
-				print("Done")
-				pass
+				self.check_all_cells()
+				print(self.incorrect_cells)
 
 		
 	def playing_draw(self):
@@ -90,6 +91,29 @@ class App:
 		self.cell_changed = True
 
 	### Helper Functions ###
+
+	def check_all_cells(self):
+		self.check_rows()
+		self.check_cols()
+		self.check_block()
+
+	def check_rows(self):
+		possible = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+		for yindex, row in enumerate(self.board):
+			for xindex in range(0, 9):
+				if self.board[xindex][yindex] in possible:
+					possible.remove(self.board[xindex][yindex])
+
+				else:
+					self.incorrect_cells.append(self.board[xindex][yindex])
+
+
+
+	def check_cols(self):
+		pass
+
+	def check_block(self):
+		pass
 
 	def is_int(self, value):
 		if value.isnumeric():
