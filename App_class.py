@@ -9,7 +9,10 @@ class App:
 		pygame.init()
 		self.window = pygame.display.set_mode((WIDTH, HEIGHT))
 		self.running = True #game variable
+		#board making
 		self.board = BOARD_2
+		self.locked = []
+		#other variables
 		self.selected = None #box selection variable
 		self.mouse_pos = None 
 		self.state = "playing" #the state of the game(menu, playing, ended etc.)
@@ -17,7 +20,7 @@ class App:
 		self.playing_buttons = []
 		self.menu_buttons = []
 		self.end_buttons = []
-		self.load_buttons()
+		self.load()
 		#text
 		self.render_font = pygame.font.SysFont("arial", CELL_SIZE//2)
 
@@ -60,6 +63,8 @@ class App:
 		if self.selected: #fill selected box
 			self.draw_selection(self.window, self.selected)
 
+		self.draw_locked(self.window, self.locked)
+
 		self.draw_numbers(self.window) #function to draw the numbers on screen
 
 		self.draw_grid(self.window) #draw grid
@@ -67,7 +72,12 @@ class App:
 
 	### Helper Functions ###
 
+	def draw_locked(self, window, locked):
+		for cell in locked:
+			pygame.draw.rect(self.window, LOCKED_CO, (cell[0]*CELL_SIZE+grid_pos[0], cell[1]*CELL_SIZE+grid_pos[1], CELL_SIZE, CELL_SIZE))
+
 	def draw_numbers(self, window):
+
 		for yindex, row in enumerate(self.board):
 			for xindex, num in enumerate(row):
 				if num != 0:
@@ -115,3 +125,13 @@ class App:
 		pos[0] += (CELL_SIZE - font_width)//2
 		pos[1] += (CELL_SIZE - font_height)//2
 		window.blit(font, pos)
+
+	def load(self):
+		self.load_buttons()
+
+		#adding locked cells to list
+		for yindex, row in enumerate(self.board):
+			for xindex, num in enumerate(row):
+				if num == 0:
+					continue
+				self.locked.append([xindex, yindex])
