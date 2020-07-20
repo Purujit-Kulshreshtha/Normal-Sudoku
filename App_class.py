@@ -39,6 +39,8 @@ class App:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				self.running = False #to quit
+
+			#on click
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				selected = self.mouse_on_grid(self.mouse_pos) #get position of selected box
 				if selected:
@@ -46,6 +48,12 @@ class App:
 				else:
 					print("Mouse not on grid.")
 					self.selected = None
+
+			#on key input
+			if event.type == pygame.KEYDOWN:
+				if self.selected != None and self.selected not in self.locked:
+					if self.is_int(event.unicode):
+						self.board[self.selected[1]][self.selected[0]] = int(event.unicode)
 
 	def playing_update(self):
 		self.mouse_pos = pygame.mouse.get_pos() #get postition of mouse at every frame
@@ -71,6 +79,12 @@ class App:
 		pygame.display.update()
 
 	### Helper Functions ###
+
+	def is_int(self, value):
+		if value.isnumeric():
+			return True
+		else:
+			return False
 
 	def draw_locked(self, window, locked):
 		for cell in locked:
