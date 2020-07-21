@@ -20,9 +20,7 @@ class App:
 		self.cell_changed = False
 		self.incorrect_cells = []
 		#buttons for each state
-		self.playing_buttons = []
-		self.menu_buttons = []
-		self.end_buttons = []
+		self.buttons_list = []
 		self.load()
 		#text
 		self.render_font = pygame.font.SysFont("arial", CELL_SIZE//2)
@@ -50,7 +48,10 @@ class App:
 					self.selected = selected #store               ^
 				else:
 					self.selected = None
-					print("Mouse not on biard")
+					for button in self.buttons_list:
+						if button.highlighted:
+							button.click()
+
 
 			#on key input
 			if event.type == pygame.KEYDOWN:
@@ -63,7 +64,7 @@ class App:
 	def playing_update(self):
 		self.mouse_pos = pygame.mouse.get_pos() #get postition of mouse at every frame
 
-		for button in self.playing_buttons:
+		for button in self.buttons_list:
 			button.update(self.mouse_pos)
 
 		if self.cell_changed:
@@ -73,13 +74,14 @@ class App:
 				self.check_board()
 
 				if len(self.incorrect_cells) == 0:
-					print("Congratulations")
+					self.finished = True
+					print("Done")
 				
 
 	def playing_draw(self):
 		self.window.fill(BG) #main window
 
-		for button in self.playing_buttons:
+		for button in self.buttons_list:
 			button.draw(self.window)
 
 		if self.selected: #fill selected box
@@ -204,7 +206,11 @@ class App:
 		pygame.draw.rect(window, CO_1, ((pos[0]*CELL_SIZE)+grid_pos[0], ( pos[1]*CELL_SIZE)+grid_pos[1],  CELL_SIZE, CELL_SIZE))
 
 	def load_buttons(self):
-		self.playing_buttons.append(Button(20, 40, 100, 40))
+		self.buttons_list.append(Button(grid_pos[0], 30, WIDTH/7, 40,
+										text = "Check",
+										color = BUTTON_CO_NORM,
+										high_color = BUTTON_CO_HIGH,
+										function = self.check_board))
 
 	def text_to_screen(self, window, text, pos):
 		font = self.render_font.render(text, False, WHITE)

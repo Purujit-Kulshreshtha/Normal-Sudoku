@@ -26,3 +26,9 @@ class Button:
 		else:
 			self.image.fill(self.color)
 		window.blit(self.image, self.pos)
+
+	def click(self):
+		if self.params:
+			self.function(self.params)
+		else:
+			self.function()
