@@ -12,13 +12,13 @@ class App:
 		#board making
 		self.board = BOARD_2_FINISHED
 		self.locked = []
-		self.incorrect_cells = []
 		#other variables
 		self.selected = None #box selection variable
 		self.mouse_pos = None 
 		self.state = "playing" #the state of the game(menu, playing, ended etc.)
 		self.finished = False
 		self.cell_changed = False
+		self.incorrect_cells = []
 		#buttons for each state
 		self.playing_buttons = []
 		self.menu_buttons = []
@@ -49,13 +49,14 @@ class App:
 				if selected:
 					self.selected = selected #store               ^
 				else:
-					print("Mouse not on grid.")
 					self.selected = None
+					print("Mouse not on biard")
 
 			#on key input
 			if event.type == pygame.KEYDOWN:
 				if self.selected != None and list(self.selected) not in self.locked:
 					if self.is_int(event.unicode):
+						#cell changed
 						self.board[self.selected[1]][self.selected[0]] = int(event.unicode)
 						self.cell_changed = True
 
@@ -66,12 +67,13 @@ class App:
 			button.update(self.mouse_pos)
 
 		if self.cell_changed:
-			if self.board_full(self.board):
-				#check if the solution is correct
-				self.check_all_cells()
+			self.incorrect_cells = []
+			if self.board_full:
+				#check if board is correct
+				self.check_board()
 				print(self.incorrect_cells)
+				
 
-		
 	def playing_draw(self):
 		self.window.fill(BG) #main window
 
@@ -87,33 +89,44 @@ class App:
 
 		self.draw_grid(self.window) #draw grid
 		pygame.display.update()
+		self.cell_changed = False
 
-		self.cell_changed = True
+	### Board Checking Functions ###
 
-	### Helper Functions ###
+	def board_full(self, board):
+		ret = True
+		for row in board:
+			if 0 in row:
+				ret = False
+				break
+		return ret
 
-	def check_all_cells(self):
-		self.check_rows()
-		self.check_cols()
+	def check_board(self):
+		self.check_row()
+		self.check_col()
 		self.check_block()
 
-	def check_rows(self):
-		possible = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	def check_row(self):
 		for yindex, row in enumerate(self.board):
+			possibles = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 			for xindex in range(0, 9):
-				if self.board[xindex][yindex] in possible:
-					possible.remove(self.board[xindex][yindex])
-
+				if self.board[yindex][xindex] in possibles:
+					possibles.remove(self.board[yindex][xindex])
 				else:
-					self.incorrect_cells.append(self.board[xindex][yindex])
+					if [xindex, yindex] not in self.locked:
+						self.incorrect_cells.append([xindex, yindex])
 
+				
+		pass
 
-
-	def check_cols(self):
+	def check_col(self):
 		pass
 
 	def check_block(self):
 		pass
+
+
+	### Helper Functions ###
 
 	def is_int(self, value):
 		if value.isnumeric():
@@ -185,10 +198,4 @@ class App:
 					continue
 				self.locked.append([xindex, yindex])
 
-	def board_full(self, board):
-		ret = True
-		for row in board:
-			if 0 in row:
-				ret = False
-				break
-		return ret
+
