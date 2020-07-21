@@ -71,7 +71,9 @@ class App:
 			if self.board_full:
 				#check if board is correct
 				self.check_board()
-				print(self.incorrect_cells)
+
+				if len(self.incorrect_cells) == 0:
+					print("Congratulations")
 				
 
 	def playing_draw(self):
@@ -131,13 +133,14 @@ class App:
 	def check_block(self):
 		for x in range(0, 3):
 			for y in range(0, 3): #Get index of bigger blocks
-			possibles = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+				possibles = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 				for i in range(0, 3):
 					for j in range(0, 3): #Get index of smaller blocks
 
-						xinde = x*3+i
-						yindex = y*3+i
+						xindex = x*3+i
+						yindex = y*3+j
 
 						if self.board[yindex][xindex] in possibles:
 							possibles.remove(self.board[yindex][xindex])
