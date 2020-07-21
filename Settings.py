@@ -5,8 +5,9 @@ HEIGHT = 600
 #colors
 BG = (22, 22, 22)
 WHITE =  (255, 255, 255)
-CO_1 = (120, 10, 0)
+CO_1 = (0, 10, 120)
 LOCKED_CO = (60, 60, 60)
+INCORRECT = (120, 10, 0)
 
 
 #gird

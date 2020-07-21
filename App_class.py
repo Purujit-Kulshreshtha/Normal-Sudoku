@@ -83,7 +83,9 @@ class App:
 		if self.selected: #fill selected box
 			self.draw_selection(self.window, self.selected)
 
-		self.draw_locked(self.window, self.locked)
+		self.draw_locked(self.window, self.locked) #function to draw locked cells
+
+		self.draw_incorrect(self.window, self.incorrect_cells) #function to draw incorrect cells
 
 		self.draw_numbers(self.window) #function to draw the numbers on screen
 
@@ -115,8 +117,6 @@ class App:
 				else:
 					if [xindex, yindex] not in self.locked:
 						self.incorrect_cells.append([xindex, yindex])
-
-				
 		pass
 
 	def check_col(self):
@@ -137,6 +137,10 @@ class App:
 	def draw_locked(self, window, locked):
 		for cell in locked:
 			pygame.draw.rect(self.window, LOCKED_CO, (cell[0]*CELL_SIZE+grid_pos[0], cell[1]*CELL_SIZE+grid_pos[1], CELL_SIZE, CELL_SIZE))
+
+	def draw_incorrect(self, window, incorrect_cells):
+		for cell in incorrect_cells:
+			pygame.draw.rect(self.window, INCORRECT, (cell[0]*CELL_SIZE+grid_pos[0], cell[1]*CELL_SIZE+grid_pos[1], CELL_SIZE, CELL_SIZE))
 
 	def draw_numbers(self, window):
 
