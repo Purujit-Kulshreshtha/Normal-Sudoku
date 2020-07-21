@@ -3,6 +3,7 @@ import sys
 from Settings import * 
 from ButtonClass import *
 
+
 #create app class
 class App:
 	def __init__(self):
@@ -10,7 +11,7 @@ class App:
 		self.window = pygame.display.set_mode((WIDTH, HEIGHT))
 		self.running = True #game variable
 		#board making
-		self.board = BOARD_2_FINISHED
+		self.board = BOARD
 		self.locked = []
 		#other variables
 		self.selected = None #box selection variable
