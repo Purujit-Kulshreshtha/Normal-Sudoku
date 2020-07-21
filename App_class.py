@@ -115,16 +115,35 @@ class App:
 				if self.board[yindex][xindex] in possibles:
 					possibles.remove(self.board[yindex][xindex])
 				else:
-					if [xindex, yindex] not in self.locked:
+					if [xindex, yindex] not in self.locked and [xindex, yindex] not in self.incorrect_cells:
 						self.incorrect_cells.append([xindex, yindex])
-		pass
 
 	def check_col(self):
-		pass
+		for xindex in range(0, 9):
+			possibles = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+			for yindex, row in enumerate(self.board):
+				if self.board[yindex][xindex] in possibles:
+					possibles.remove(self.board[yindex][xindex])
+				else:
+					if [xindex, yindex] not in self.locked and [xindex, yindex] not in self.incorrect_cells:
+						self.incorrect_cells.append([xindex, yindex])
 
 	def check_block(self):
-		pass
+		for x in range(0, 3):
+			for y in range(0, 3): #Get index of bigger blocks
+			possibles = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+				for i in range(0, 3):
+					for j in range(0, 3): #Get index of smaller blocks
+
+						xinde = x*3+i
+						yindex = y*3+i
+
+						if self.board[yindex][xindex] in possibles:
+							possibles.remove(self.board[yindex][xindex])
+						else:
+							if [xindex, yindex] not in self.locked and [xindex, yindex] not in self.incorrect_cells:
+								self.incorrect_cells.append([xindex, yindex])
 
 	### Helper Functions ###
 
